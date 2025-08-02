@@ -2,6 +2,40 @@
 
 A complete VPS server configuration for hosting Go applications with automated deployment through GitHub webhooks. This setup replaces traditional shared hosting PHP/HTML environments with a modern Docker-based infrastructure.
 
+## Automatic Deployment via Webhook
+
+When you push code to your repository on GitHub (or GitLab), if a webhook is configured, it will automatically trigger a deployment process. This process typically involves pulling the latest code and redeploying the application container using Docker. This enables continuous deployment, ensuring that your application is always up-to-date with the latest changes from your repository.
+
+---
+
+### How to Configure a Webhook in a GitHub Project
+
+1. **Navigate to Your Repository**:  
+    Go to your repository on GitHub.
+
+2. **Go to Settings > Webhooks**:  
+    Click on the **Settings** tab in your repository, then select **Webhooks** from the left sidebar.
+
+3. **Click Add webhook**:  
+    Click the **Add webhook** button to create a new webhook.
+
+4. **Enter the Webhook URL**:  
+    In the **Payload URL** field, enter the endpoint that should receive the webhook POST requests (e.g., `http://your-server:6666/webhook`).
+
+5. **Set Content Type**:  
+    Select **application/json** as the content type.
+
+6. **Set Secret Token**:  
+    In the **Secret** field, enter a secret token that your server will use to verify the webhook request (this should match the `webhookSecret` in your `github_webhook.go` file).
+
+7. **Select Trigger Events**:  
+    Choose **Just the push event** for code pushes, or select **Let me select individual events** for more specific triggers.
+
+8. **Save the Webhook**:  
+    Click **Add webhook** to save your configuration.
+
+Now, whenever a push occurs to the repository, GitHub will send a POST request to your specified URL, which will trigger your deployment script or process.
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -9,6 +43,7 @@ A complete VPS server configuration for hosting Go applications with automated d
 - [Components](#components)
 - [Setup Guide](#setup-guide)
 - [Configuration](#configuration)
+  - [How to Configure a Webhook in a GitHub Project](#how-to-configure-a-webhook-in-a-github-project)
 - [Usage Examples](#usage-examples)
 - [How It Works](#how-it-works)
 - [Troubleshooting](#troubleshooting)
@@ -128,7 +163,7 @@ networks:
     external: true
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### Environment Variables for Your Apps
 
@@ -186,7 +221,7 @@ networks:
     external: true
 ```
 
-## 🔄 How It Works - Step by Step
+## How It Works - Step by Step
 
 ### 1. **Initial Setup**
 ```bash
